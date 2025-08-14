@@ -104,13 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function showMap() {
     currentMode = 'map';
     
-    // Detectar si es mobile
-    const isMobile = window.innerWidth <= 768;
-    const mapZoom = isMobile ? 'scale(1.3)' : 'scale(1)';
-    
     panorama.innerHTML = `
         <div class="map-container">
-            <img src="img/mapa-usac.png" alt="Mapa USAC" id="mapImage" style="transform: ${mapZoom};">
+            <img src="img/mapa-usac.png" alt="Mapa USAC" id="mapImage">
             <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="34" data-y="40"></div>
             <div class="map-marker" data-target="biblioteca-central" title="Biblioteca Central" data-x="45" data-y="31"></div>
             <div class="map-marker" data-target="derecho" title="Facultad de Derecho" data-x="59" data-y="38"></div>
@@ -298,7 +294,7 @@ function generateDescription(location) {
             <div class="schedule-item">
                 <div class="time">⏰ ${item.time}</div>
                 <div class="activity">${item.activity}</div>
-                ${item.speaker ? `<div class="speaker">👤 ${item.speaker}</div>` : ''}
+                ${item.speaker ? `<div class="speaker">${item.speaker}</div>` : ''}
                 ${item.subSpeaker ? `<div class="sub-speaker">🎓 ${item.subSpeaker}</div>` : ''}
             </div>
         `;
