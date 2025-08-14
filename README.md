@@ -90,3 +90,7 @@ La aplicación se adapta automáticamente a:
 ## 📄 Licencia
 
 Este proyecto utiliza Photo Sphere Viewer y Three.js bajo licencia MIT.
+
+---
+
+**Última actualización:** Enero 2025 - Versión con efectos tech y diseño mejorado
