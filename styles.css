@@ -1133,6 +1133,7 @@ header p {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    min-width: 0 !important;
 }
 
 .psv-caption-content {
@@ -1153,21 +1154,24 @@ header p {
 .psv-navbar .psv-caption .psv-caption-content {
     font-size: 16px !important;
     white-space: nowrap !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
     font-weight: 600 !important;
     text-align: center !important;
     width: 100% !important;
     font-family: 'Croptech', sans-serif !important;
+    max-width: 100% !important;
+    flex-shrink: 1 !important;
 }
 
 /* Responsive para pantallas pequeñas */
 @media (max-width: 768px) {
     .psv-navbar .psv-caption .psv-caption-content {
-        font-size: 14px !important;
+        font-size: 11px !important;
         white-space: nowrap !important;
         overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: 200px !important;
+        text-overflow: clip !important;
+        max-width: 100% !important;
     }
     
     .psv-navbar {

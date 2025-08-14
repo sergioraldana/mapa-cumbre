@@ -40,7 +40,7 @@ const locations = {
         ]
     },
     'derecho': {
-        name: 'Auditorio Mario López Larrave – Facultad de Ciencias Jurídicas y Sociales, edificio S7',
+        name: 'Auditorio Mario López Larrave – Derecho (S7)',
         image: '360/derecho.jpg',
         capacity: '170 espacios',
         schedule: [
