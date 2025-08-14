@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumbre Contecta USAC</title>
+    <!-- Fuentes locales -->
+    <style>
+        @font-face {
+            font-family: 'Croptech';
+            src: url('fonts/Croptech.otf') format('opentype'),
+                 url('fonts/Croptech.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="img/logo.jpg" alt="Logo USAC" class="header-logo">
+            <h1>Mapa inmersivo de ubicación de conferencias simultáneas</h1>
+        </header>
+        <main>
+            <div class="viewer-container">
+                <div id="viewer" class="viewer">
+                    <div id="panorama" class="panorama">
+                        <div class="loading" id="loading">
+                            <div class="spinner"></div>
+                            <p>Cargando imagen 360...</p>
+                        </div>
+                        <!-- Hotspot card for embedded image -->
+                        <div id="hotspotCard" class="hotspot-card" style="display:none;">
+                            <img src="conferencias/biblioteca-central.jpg" alt="Conferencia">
+                            <button id="closeCard" class="close-button">X</button>
+                        </div>
+                    </div>
+                    <div class="controls">
+                        <button id="backToMap" class="control-btn control-back" title="Volver al mapa" style="display:none">←</button>
+                        <button id="fullscreen" class="control-btn" title="Pantalla completa"><span>⛶</span></button>
+                        <button id="reset" class="control-btn" title="Reiniciar vista"><span>↺</span></button>
+                    </div>
+                </div>
+                <div class="instructions-container">
+                    <div class="instructions">
+                        <h3>Instrucciones:</h3>
+                        <ul>
+                            <li>📍 Toca cualquier marcador en el mapa para abrir la vista 360 de esa ubicación</li>
+                            <li>🖱️ Arrastra para rotar la vista 360</li>
+                            <li>🔍 Usa la rueda del mouse para hacer zoom</li>
+                            <li>⛶ Pantalla completa disponible</li>
+                            <li>ℹ️ Haz clic al icono de información (i) para ver el programa completo</li>
+                            <li>← Usa el botón de regreso para volver al mapa</li>
+                            <li>↺ Reinicia la vista con el botón de reset</li>
+                        </ul>
+                    </div>
+                    <div class="slogan-container">
+                        <img src="img/slogan.jpg" alt="Slogan USAC" class="slogan-image">
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+                "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
+                "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
+            }
+        }
+    </script>
+
+    <script type="module" src="script-cdn.js"></script>
+</body>
+</html>
