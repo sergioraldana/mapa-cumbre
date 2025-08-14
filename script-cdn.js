@@ -67,7 +67,7 @@ const locations = {
         ]
     },
     'ciencias-economicas': {
-        name: 'Auditorio Álvaro Castillo Urrutia – Facultad de Ciencias Económicas, edificio S8',
+        name: 'Auditorio Álvaro Castillo Urrutia – Ciencias Económicas (S8)',
         image: '360/ciencias economicas.jpg',
         capacity: 'Sin especificar',
         schedule: [
