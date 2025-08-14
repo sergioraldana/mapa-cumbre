@@ -103,9 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function showMap() {
     currentMode = 'map';
+    
+    // Detectar si es mobile
+    const isMobile = window.innerWidth <= 768;
+    const mapZoom = isMobile ? 'scale(1.3)' : 'scale(1)';
+    
     panorama.innerHTML = `
         <div class="map-container">
-            <img src="img/mapa-usac.png" alt="Mapa USAC" id="mapImage">
+            <img src="img/mapa-usac.png" alt="Mapa USAC" id="mapImage" style="transform: ${mapZoom};">
             <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="34" data-y="40"></div>
             <div class="map-marker" data-target="biblioteca-central" title="Biblioteca Central" data-x="45" data-y="31"></div>
             <div class="map-marker" data-target="derecho" title="Facultad de Derecho" data-x="59" data-y="38"></div>
@@ -302,7 +307,7 @@ function generateDescription(location) {
     html += `
                 </div>
             </div>
-            <button class="conference-cta" onclick="window.open('#inscripcion', '_blank')">Inscríbete aquí</button>
+            <a href="https://cumbre.usac.edu.gt/?key=eventos&key2=688bca8b523caba7cd34cae6" target="_blank" class="conference-cta">🎓 Inscríbete aquí</a>
         </div>
     `;
     
