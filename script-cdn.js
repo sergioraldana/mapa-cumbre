@@ -23,65 +23,89 @@ const locations = {
         image: '360/iglu.jpg',
         capacity: '350 espacios',
         schedule: [
-            { time: '09:00 – 09:30', activity: 'Acto protocolario – Inauguración oficial', speaker: 'Autoridades de la Universidad de San Carlos de Guatemala' },
-            { time: '09:30 – 10:15', activity: 'Plenaria inaugural', speaker: 'Conferencia: Retos de la regulación de la IA generativa y su relación con los derechos de autor', subSpeaker: 'Dr. Juan Manuel Delva Benavides – Universidad de Guadalajara (UdeG)' },
-            { time: '10:30 – 12:00', activity: 'Experiencia inmersiva – Mapping', speaker: 'Willy Posadas y Daniela Pinto' },
-            { time: '15:30 – 17:00', activity: 'Conferencia – Taller de cierre', speaker: 'El poder de la narrativa en un mundo de bloques: de la construcción al storytelling', subSpeaker: 'Rodrigo Narváez (Bobicraft)' },
-            { time: '17:00 – 18:00', activity: 'Premiación de proyectos', speaker: 'Dirección General de Extensión – Ing. Wendy López' }
+            { time: '9:00 – 9:30', activity: 'Acto protocolario – Inauguración oficial', speaker: 'Autoridades USAC', subSpeaker: '' },
+            { time: '9:30 – 10:15', activity: 'Plenaria inaugural', speaker: 'Conferencia: Retos de la regulación de la IA generativa y su relación con los derechos de autor', subSpeaker: 'Dr. Juan Manuel Delva Benavides – Universidad de Guadalajara (UdeG)' },
+            { time: '10:30 – 12:00', activity: 'Experiencia inmersiva – Mapping', speaker: '', subSpeaker: 'Willy Posadas, Daniela Pinto' },
+            { time: '15:30 – 17:00', activity: 'Conferencia – taller de cierre', speaker: 'El poder de la narrativa en un mundo de bloques: de la construcción al storytelling', subSpeaker: 'Rodrigo Narváez (Bobicraft)' },
+            { time: '17:00 – 18:00', activity: 'Premiación de proyectos', speaker: 'Dirección General de Extensión', subSpeaker: 'Ing. Wendy López' }
         ]
     },
     'biblioteca-central': {
-        name: 'Biblioteca Central, 4.º nivel',
+        name: 'Biblioteca Central, 4to nivel',
         image: '360/biblioteca-central.jpg',
         capacity: '100 espacios',
         schedule: [
-            { time: '10:30 – 12:00', activity: 'Conferencia y taller 1', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Juan Carlos Saravia – Rabidxuan' },
-            { time: '14:00 – 15:30', activity: 'Conferencia y taller 1', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Modelación y simulación de procesos industriales depurados por IA. Inge. José David Valerio – Universidad Tecnológica de Honduras' }
+            { time: '10:30 – 12:00', activity: 'Conferencia y taller 1', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Juan Carlos Saravia – Kabukiza' },
+            { time: '14:00 – 15:30', activity: 'Conferencia y taller 1', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Ing. José David Valerio – Universidad Tecnológica de Honduras' }
         ]
     },
-    'derecho': {
-        name: 'Auditorio Mario López Larrave – Derecho (S7)',
-        image: '360/derecho.jpg',
+    'ciencias-juridicas': {
+        name: 'Auditorio Mario López Larrave – Facultad de Ciencias Jurídicas y Sociales (S7)',
+        image: '360/ciencias-juridicas.jpg',
         capacity: '170 espacios',
         schedule: [
-            { time: '10:30 – 12:00', activity: 'Conferencia y taller 2', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Dr. Leonardo David Glasserman Morales – Tecnológico de Monterrey, México' },
-            { time: '14:00 – 15:30', activity: 'Conferencia y taller 2', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Ing. Américo Sirvente – Universidad de San Juan, Argentina' }
+            { time: '10:30 – 12:00', activity: 'Conferencia y taller 2', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Dr. Juan Pablo Consuegra – Tecnológico de Monterrey, México' },
+            { time: '14:00 – 15:30', activity: 'Conferencia y taller 2', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Dr. Rubén Edel Navarro – Universidad Veracruzana, México' }
         ]
     },
     'humanidades': {
-        name: 'Auditorio Roltz Bennet – Facultad de Humanidades, edificio S4',
+        name: 'Auditorio Rolz Bennet – Facultad de Humanidades (S4)',
         image: '360/humanidades.jpg',
         capacity: '217 espacios',
         schedule: [
-            { time: '10:30 – 12:00', activity: 'Conferencia y taller 3', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Dr. José Antonio Canchola – Tecnológico de Monterrey, México' },
-            { time: '14:00 – 15:30', activity: 'Conferencia y taller 3', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Rubén Edel Navarro – Universidad Veracruzana' }
+            { time: '10:30 – 12:00', activity: 'Conferencia y taller 3', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Dr. José Antonio Zornosa – Tecnológico de Monterrey, México' },
+            { time: '14:00 – 15:30', activity: 'Panel', speaker: 'Experiencia Samsung: Ecosistema de empleabilidad', subSpeaker: 'María Fernanda Hernández – Staff Samsung Innovation Campus' }
         ]
     },
     'ingenieria': {
-        name: 'Auditorio Francisco Vela – Facultad de Ingeniería, edificio T3',
+        name: 'Auditorio Francisco Vela – Facultad de Ingeniería (T3)',
         image: '360/ingenieria.jpg',
         capacity: '250 espacios',
         schedule: [
-            { time: '10:30 – 12:00', activity: 'Conferencia y taller 4', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Temas: La nueva revolución de las IA: gemelos digitales en la ingeniería. Hacking ético y ciberseguridad orientada a dispositivos lógicos programables. Jorge Alberto Vargas – Universidad Tecnológica de Honduras' },
-            { time: '14:00 – 15:30', activity: 'Panel: Experiencia SAMSUNG Innovation – ecosistema de empleabilidad', speaker: 'María Fernanda Hernández – Samsung Innovation Campus' }
+            { time: '10:30 – 12:00', activity: 'Conferencia y taller 4', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Jorge Alberto Herrera – Universidad Tecnológica de Honduras' },
+            { time: '14:00 – 15:30', activity: 'Conferencia y taller 4', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Juan José Victoria Maldonado – Orientaciones sobre buenas prácticas de la IA en contextos educativos' }
         ]
     },
     'ciencias-economicas': {
-        name: 'Auditorio Álvaro Castillo Urrutia – Ciencias Económicas (S8)',
-        image: '360/ciencias economicas.jpg',
-        capacity: 'Sin especificar',
+        name: 'Auditorio Álvaro Castillo Urrutia – Facultad de Ciencias Económicas (S8)',
+        image: '360/ciencias-economicas.jpg',
+        capacity: '220 espacios',
         schedule: [
             { time: '10:30 – 12:00', activity: 'Conferencia y taller 5', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Yen Caballero-González – Fundación Ciudad del Saber y SENACYT Panamá' },
             { time: '14:00 – 15:30', activity: 'Conferencia y taller 5', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'Juan José Victoria Maldonado – Orientaciones sobre buenas praxis de la IA en contextos educativos' }
         ]
     },
     'arquitectura': {
-        name: 'Auditorio – Facultad de Arquitectura, edificio T2',
+        name: 'Auditorio – Facultad de Arquitectura (T2)',
         image: '360/arquitectura.jpg',
         capacity: '220 espacios',
         schedule: [
             { time: '10:30 – 12:00', activity: 'Conferencia y taller 6', speaker: '¿Cómo puede la IA mejorar la educación superior?', subSpeaker: 'Dra. Nicia Guillén Yparrea – Tecnológico de Monterrey, México' },
             { time: '14:00 – 15:30', activity: 'Conferencia y taller 6', speaker: 'IA y liderazgo estudiantil: desafíos y oportunidades', subSpeaker: 'IA generativa responsable en educación superior: del hype a la gobernanza práctica. Dr. Juan Manuel Delva Benavides – Universidad de Guadalajara (UdeG)' }
+        ]
+    },
+    'plaza': {
+        name: 'Plaza de los Mártires',
+        image: '360/plaza.jpg',
+        capacity: 'Espacio abierto',
+        schedule: [
+            { time: '18:00', activity: 'Cierre musical', speaker: '', subSpeaker: '' }
+        ]
+    },
+    'plaza-mario': {
+        name: 'Plaza Mario López Larrave (sótano de Biblioteca)',
+        image: '360/plaza-mario.jpg',
+        capacity: 'Espacio abierto',
+        schedule: [
+            { time: '9:00 – 17:00', activity: 'Zonas de activación', speaker: '', subSpeaker: 'Arte y Cultura – Deportes – Voluntariado – Simuladores – Podcast' }
+        ]
+    },
+    'lobby-biblioteca': {
+        name: 'Lobby Biblioteca Central (primer nivel)',
+        image: '360/lobby-biblioteca.jpg',
+        capacity: '100 espacios',
+        schedule: [
+            { time: '9:00 – 17:00', activity: 'Actividades interactivas', speaker: '', subSpeaker: 'Estación realidad virtual (Biblioteca)' }
         ]
     }
 };
@@ -106,14 +130,17 @@ function showMap() {
     
     panorama.innerHTML = `
         <div class="map-container">
-            <img src="img/mapa-usac.png" alt="Mapa USAC" id="mapImage">
-            <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="34" data-y="40"></div>
-            <div class="map-marker" data-target="biblioteca-central" title="Biblioteca Central" data-x="45" data-y="31"></div>
-            <div class="map-marker" data-target="derecho" title="Facultad de Derecho" data-x="59" data-y="38"></div>
-            <div class="map-marker" data-target="humanidades" title="Facultad de Humanidades" data-x="52" data-y="31"></div>
-            <div class="map-marker" data-target="ingenieria" title="Facultad de Ingeniería" data-x="35" data-y="22"></div>
-            <div class="map-marker" data-target="ciencias-economicas" title="Facultad de Ciencias Económicas" data-x="63" data-y="38"></div>
-            <div class="map-marker" data-target="arquitectura" title="Facultad de Arquitectura" data-x="38" data-y="17"></div>
+            <img src="img/mapa-usac.jpg" alt="Mapa USAC" id="mapImage">
+            <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="77" data-y="18"></div>
+            <div class="map-marker" data-target="biblioteca-central" title="Biblioteca Central" data-x="55" data-y="25"></div>
+            <div class="map-marker" data-target="ciencias-juridicas" title="Facultad de Ciencias Jurídicas" data-x="30" data-y="20"></div>
+            <div class="map-marker" data-target="ciencias-economicas" title="Facultad de Ciencias Económicas" data-x="17" data-y="24"></div>
+            <div class="map-marker" data-target="humanidades" title="Facultad de Humanidades" data-x="37" data-y="32"></div>
+            <div class="map-marker" data-target="ingenieria" title="Facultad de Ingeniería" data-x="70" data-y="53"></div>
+            <div class="map-marker" data-target="arquitectura" title="Facultad de Arquitectura" data-x="73" data-y="70"></div>
+            <div class="map-marker" data-target="plaza" title="Plaza de los Mártires" data-x="45" data-y="45"></div>
+            <div class="map-marker" data-target="plaza-mario" title="Plaza Mario López Larrave" data-x="50" data-y="35"></div>
+            <div class="map-marker" data-target="lobby-biblioteca" title="Lobby Biblioteca Central" data-x="55" data-y="30"></div>
         </div>
     `;
     
