@@ -1,20 +1,10 @@
-import { Viewer } from '@photo-sphere-viewer/core';
-import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
-
+// Variables globales
 let photoSphereViewer = null;
 let markersPlugin = null;
+let currentMode = 'map';
 
 // Elementos del DOM
-const panorama = document.getElementById('panorama');
-const viewer = document.getElementById('viewer');
-const loading = document.getElementById('loading');
-const fullscreenBtn = document.getElementById('fullscreen');
-const resetBtn = document.getElementById('reset');
-const backToMapBtn = document.getElementById('backToMap');
-const hotspotCard = document.getElementById('hotspotCard');
-const closeCardBtn = document.getElementById('closeCard');
-
-let currentMode = 'map'; // 'map' or '360'
+let panorama, viewer, loading, fullscreenBtn, resetBtn, backToMapBtn, hotspotCard, closeCardBtn;
 
 // Datos de las ubicaciones
 const locations = {
@@ -110,27 +100,39 @@ const locations = {
     }
 };
 
-// Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    setupControls();
-    showMap(); // Start with the map
-    
-    // Reposicionar marcadores cuando cambie el tamaño de la ventana
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        if (currentMode === 'map') {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(positionMarkers, 50);
-        }
+// Función para esperar a que las librerías estén disponibles
+function waitForLibraries() {
+    return new Promise((resolve) => {
+        const checkLibraries = () => {
+            if (typeof PhotoSphereViewer !== 'undefined' && typeof PhotoSphereViewerMarkers !== 'undefined') {
+                resolve();
+            } else {
+                setTimeout(checkLibraries, 100);
+            }
+        };
+        checkLibraries();
     });
-});
+}
 
+// Función para inicializar elementos del DOM
+function initializeElements() {
+    panorama = document.getElementById('panorama');
+    viewer = document.getElementById('viewer');
+    loading = document.getElementById('loading');
+    fullscreenBtn = document.getElementById('fullscreen');
+    resetBtn = document.getElementById('reset');
+    backToMapBtn = document.getElementById('backToMap');
+    hotspotCard = document.getElementById('hotspotCard');
+    closeCardBtn = document.getElementById('closeCard');
+}
+
+// Función para mostrar el mapa
 function showMap() {
     currentMode = 'map';
     
     panorama.innerHTML = `
         <div class="map-container">
-            <img src="img/mapa-usac.jpg" alt="Mapa USAC" id="mapImage">
+            <img src="${mapaCumbreData.pluginUrl}img/mapa-usac.jpg" alt="Mapa USAC" id="mapImage">
             <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="77.5" data-y="19"></div>
             <div class="map-marker" data-target="lobby-biblioteca" title="Lobby Biblioteca Central" data-x="58" data-y="29"></div>
             <div class="map-marker" data-target="biblioteca-central" title="Biblioteca Central" data-x="55" data-y="25"></div>
@@ -144,7 +146,6 @@ function showMap() {
         </div>
     `;
     
-    // Posicionar marcadores inmediatamente
     setTimeout(positionMarkers, 50);
     
     loading.style.display = 'none';
@@ -153,7 +154,7 @@ function showMap() {
     resetBtn.style.display = 'none';
     hotspotCard.style.display = 'none';
     
-    // Add event listeners for all map markers
+    // Event listeners para marcadores del mapa
     const mapMarkers = panorama.querySelectorAll('.map-marker');
     mapMarkers.forEach(marker => {
         marker.addEventListener('click', () => {
@@ -175,6 +176,7 @@ function showMap() {
     }
 }
 
+// Función para posicionar marcadores
 function positionMarkers() {
     const mapContainer = document.querySelector('.map-container');
     const mapImage = document.querySelector('#mapImage');
@@ -182,11 +184,9 @@ function positionMarkers() {
     
     if (!mapContainer || !mapImage) return;
     
-    // Obtener las dimensiones reales de la imagen
     const imageRect = mapImage.getBoundingClientRect();
     const containerRect = mapContainer.getBoundingClientRect();
     
-    // Calcular el offset de la imagen dentro del contenedor
     const imageOffsetX = imageRect.left - containerRect.left;
     const imageOffsetY = imageRect.top - containerRect.top;
     
@@ -194,11 +194,9 @@ function positionMarkers() {
         const x = parseFloat(marker.getAttribute('data-x'));
         const y = parseFloat(marker.getAttribute('data-y'));
         
-        // Calcular posiciones basadas en el tamaño real de la imagen
         const absoluteX = imageOffsetX + (x / 100) * imageRect.width;
         const absoluteY = imageOffsetY + (y / 100) * imageRect.height;
         
-        // Usar posiciones absolutas en píxeles
         marker.style.position = 'absolute';
         marker.style.left = absoluteX + 'px';
         marker.style.top = absoluteY + 'px';
@@ -207,6 +205,7 @@ function positionMarkers() {
     });
 }
 
+// Función para mostrar vista 360°
 function show360(imageSrc, locationKey) {
     currentMode = '360';
     backToMapBtn.style.display = 'block';
@@ -219,23 +218,21 @@ function show360(imageSrc, locationKey) {
         loading.innerHTML = `
             <div class="loading-content">
                 <div class="spinner"></div>
-                <h3>🌐 Cargando Vista 360°...</h3>
-                <p>Este archivo es grande (${locationKey === 'lobby-biblioteca' ? '10.7 MB' : '11 MB'}), por favor espera un momento.</p>
+                <h3>Cargando Vista 360°...</h3>
+                <p>Este archivo es grande, por favor espera un momento.</p>
             </div>
         `;
     }
     
-    // Limpiar contenedor y crear visor
     panorama.innerHTML = '';
-    console.log('🔄 Iniciando Photo Sphere Viewer...');
+    console.log('Iniciando Photo Sphere Viewer...');
     
     const location = locations[locationKey];
     
     try {
-        // Crear títulos más descriptivos
-        photoSphereViewer = new Viewer({
+        photoSphereViewer = new PhotoSphereViewer.Viewer({
             container: panorama,
-            panorama: imageSrc,
+            panorama: mapaCumbreData.pluginUrl + imageSrc,
             caption: location.name,
             description: generateDescription(location),
             navbar: ['caption', 'description'],
@@ -243,7 +240,6 @@ function show360(imageSrc, locationKey) {
             mousewheel: true,
             mousemove: true,
             touchmoveTwoFingers: true,
-            loadingImg: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDNDMTEuNzE2IDMgNSAxMC4xNjMgNSAxOS4wODNDNSAyNy4wMDMgMTEuNzE2IDM0LjE2NyAyMCAzNC4xNjdDMjguMjg0IDM0LjE2NyAzNSAyNy4wMDMgMzUgMTkuMDgzQzM1IDEwLjE2MyAyOC4yODQgMyAyMCAzWiIgZmlsbD0iIzAwQTBCOCIvPgo8cGF0aCBkPSJNMjAgMzVDMjguMjg0IDM1IDM1IDI4LjI4NCAzNSAyMEMzNSAxMS43MTYgMjguMjg0IDUgMjAgNUMyMC4wMDEgNSAyMCA1IDIwIDVWMzVDMjAgMzUgMjAgMzUgMjAgMzVaIiBmaWxsPSIjMDBBMEI4Ii8+Cjwvc3ZnPgo=',
             moveSpeed: 1.5,
             zoomSpeed: 1,
             maxZoom: 2,
@@ -259,7 +255,7 @@ function show360(imageSrc, locationKey) {
                 description: 'Información de la Conferencia',
                 download: 'Descargar',
                 fullscreen: 'Pantalla completa',
-                loading: '🌐 Cargando Vista 360°...',
+                loading: 'Cargando Vista 360°...',
                 menu: 'Menú',
                 close: 'Cerrar',
                 twoFingers: 'Usa dos dedos para navegar',
@@ -268,84 +264,37 @@ function show360(imageSrc, locationKey) {
                 webglError: 'Tu navegador no parece soportar WebGL'
             },
             plugins: [
-                MarkersPlugin.withConfig({
-                    markers: (() => {
-                        if (locationKey === 'iglu') {
-                            // Para el Iglú, mostrar dos imágenes lado a lado
-                            return [
-                                {
-                                    id: 'conference-image-1',
-                                    position: { 
-                                        yaw: Math.PI, // 180 grados (lado opuesto)
-                                        pitch: -0.2 
-                                    },
-                                    imageLayer: 'conferencias/iglu.jpg',
-                                    size: { width: 800, height: 450 },
-                                    anchor: 'bottom left'
-                                },
-                                {
-                                    id: 'conference-image-2',
-                                    position: { 
-                                        yaw: Math.PI, // 180 grados (lado opuesto)
-                                        pitch: -0.2 
-                                    },
-                                    imageLayer: 'conferencias/iglu-2.jpg',
-                                    size: { width: 800, height: 450 },
-                                    anchor: 'bottom right'
-                                }
-                            ];
-                        } else {
-                            // Para todas las demás ubicaciones, mostrar una sola imagen
-                            return [
-                                {
-                                    id: 'conference-image',
-                                    position: { 
-                                        yaw: (() => {
-                                            if (locationKey === 'arquitectura' || locationKey === 'lobby-biblioteca') {
-                                                return Math.PI; // 180 grados (lado opuesto)
-                                            } else if (locationKey === 'ciencias-juridicas' || locationKey === 'plaza' || locationKey === 'plaza-mario') {
-                                                return Math.PI / 2; // 90 grados (lado derecho)
-                                            } else {
-                                                return 0; // 0 grados (frente)
-                                            }
-                                        })(), 
-                                        pitch: -0.2 
-                                    },
-                                    imageLayer: (() => {
-                                        switch(locationKey) {
-                                            case 'biblioteca-central': return 'conferencias/biblioteca-central.jpg';
-                                            case 'ciencias-juridicas': return 'conferencias/derecho.jpg';
-                                            case 'humanidades': return 'conferencias/humanidades.jpg';
-                                            case 'ingenieria': return 'conferencias/ingenieria.jpg';
-                                            case 'ciencias-economicas': return 'conferencias/ciencias-economicas.jpg';
-                                            case 'arquitectura': return 'conferencias/arquitectura.jpg';
-                                            case 'plaza': return 'conferencias/conferencias.jpeg';
-                                            case 'plaza-mario': return 'conferencias/conferencias.jpeg';
-                                            case 'lobby-biblioteca': return 'conferencias/biblitoeca.jpg';
-                                            default: return 'conferencias/conferencias.jpeg';
-                                        }
-                                    })(),
-                                    size: { width: 1600, height: 900 },
-                                    anchor: 'bottom center'
-                                }
-                            ];
+                PhotoSphereViewerMarkers.MarkersPlugin.withConfig({
+                    markers: [
+                        {
+                            id: 'conference-image',
+                            position: { 
+                                yaw: (() => {
+                                    if (locationKey === 'arquitectura' || locationKey === 'iglu' || locationKey === 'lobby-biblioteca') {
+                                        return Math.PI;
+                                    } else if (locationKey === 'ciencias-juridicas' || locationKey === 'plaza' || locationKey === 'plaza-mario') {
+                                        return Math.PI / 2;
+                                    } else {
+                                        return 0;
+                                    }
+                                })(), 
+                                pitch: -0.2 
+                            },
+                            imageLayer: mapaCumbreData.pluginUrl + 'conferencias/conferencias.jpeg',
+                            size: { width: 1600, height: 900 },
+                            anchor: 'bottom center'
                         }
-                    })()
+                    ],
                 })
             ]
         });
         
-        // Configurar eventos después de crear el viewer
         photoSphereViewer.addEventListener('ready', () => {
-            console.log('✅ Photo Sphere Viewer cargado correctamente');
-            setupMarkerEvents();
+            console.log('Photo Sphere Viewer cargado correctamente');
             loading.style.display = 'none';
-            clearTimeout(loadTimeout); // Limpiar timeout cuando carga exitosamente
             
-            // Establecer vista inicial para ingeniería
             if (locationKey === 'ingenieria') {
                 setTimeout(() => {
-                    // Convertir 149 grados a radianes (149 * π / 180)
                     const headingRadians = (149 * Math.PI) / 180;
                     photoSphereViewer.animate({
                         longitude: headingRadians,
@@ -354,34 +303,24 @@ function show360(imageSrc, locationKey) {
                     }, 1000);
                 }, 500);
             }
-            
-
         });
         
         photoSphereViewer.addEventListener('error', (error) => {
-            console.error('❌ Error en Photo Sphere Viewer:', error);
+            console.error('Error en Photo Sphere Viewer:', error);
             showError('Error al cargar la imagen 360°: ' + error);
         });
         
-        // Timeout para archivos grandes
-        const loadTimeout = setTimeout(() => {
-            if (loading.style.display !== 'none') {
-                console.log('⏰ Timeout de carga para archivo grande');
-                showError('El archivo es muy grande y está tardando en cargar. Por favor, espera un momento más o intenta nuevamente.');
-            }
-        }, 30000); // 30 segundos de timeout
-        
-        // Obtener referencia al plugin de markers
-        markersPlugin = photoSphereViewer.getPlugin(MarkersPlugin);
-        console.log('🔄 Photo Sphere Viewer inicializado:', photoSphereViewer);
-        console.log('🔄 MarkersPlugin cargado:', markersPlugin);
+        markersPlugin = photoSphereViewer.getPlugin(PhotoSphereViewerMarkers.MarkersPlugin);
+        console.log('Photo Sphere Viewer inicializado:', photoSphereViewer);
+        console.log('MarkersPlugin cargado:', markersPlugin);
         
     } catch (error) {
-        console.error('❌ Error inicializando Photo Sphere Viewer:', error);
+        console.error('Error inicializando Photo Sphere Viewer:', error);
         showError('Error al inicializar el visor 360°: ' + error.message);
     }
 }
 
+// Función para generar descripción
 function generateDescription(location) {
     let html = `
         <div class="conference-info">
@@ -412,36 +351,9 @@ function generateDescription(location) {
     return html;
 }
 
-function setupMarkerEvents() {
-    if (markersPlugin) {
-        console.log('✅ MarkersPlugin configurado correctamente');
-    }
-}
-
-function setupControls() {
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
-    resetBtn.addEventListener('click', resetView);
-    backToMapBtn.addEventListener('click', showMap);
-    closeCardBtn.addEventListener('click', () => {
-        hotspotCard.style.display = 'none';
-    });
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (currentMode === '360') {
-                showMap();
-            } else if (hotspotCard.style.display === 'block') {
-                hotspotCard.style.display = 'none';
-            }
-        }
-        if (e.key === 'r' || e.key === 'R') {
-            resetView();
-        }
-    });
-}
-
+// Función para mostrar error
 function showError(message) {
-    this.loading.innerHTML = `
+    loading.innerHTML = `
         <div style="
             display: flex;
             align-items: center;
@@ -469,38 +381,58 @@ function showError(message) {
     `;
 }
 
+// Función para configurar controles
+function setupControls() {
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+    resetBtn.addEventListener('click', resetView);
+    backToMapBtn.addEventListener('click', showMap);
+    closeCardBtn.addEventListener('click', () => {
+        hotspotCard.style.display = 'none';
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (currentMode === '360') {
+                showMap();
+            } else if (hotspotCard.style.display === 'block') {
+                hotspotCard.style.display = 'none';
+            }
+        }
+        if (e.key === 'r' || e.key === 'R') {
+            resetView();
+        }
+    });
+}
+
+// Función para pantalla completa
 function toggleFullscreen() {
     if (photoSphereViewer && photoSphereViewer.toggleFullscreen) {
         photoSphereViewer.toggleFullscreen();
     } else {
-        // Fallback para cuando no hay Photo Sphere Viewer
         if (viewer.classList.contains('fullscreen')) {
             viewer.classList.remove('fullscreen');
-            fullscreenBtn.innerHTML = '<span>⛶</span>';
+            fullscreenBtn.innerHTML = '⛶';
         } else {
             viewer.classList.add('fullscreen');
-            fullscreenBtn.innerHTML = '<span>⛶</span>';
+            fullscreenBtn.innerHTML = '⛶';
         }
     }
 }
 
+// Función para reiniciar vista
 function resetView() {
     if (photoSphereViewer) {
         try {
-            // Usar el método correcto de Photo Sphere Viewer
             photoSphereViewer.setZoomLevel(0);
             photoSphereViewer.setPosition({
                 longitude: 0,
                 latitude: 0
             });
-            console.log('🔄 Vista reiniciada - zoom y posición original');
+            console.log('Vista reiniciada');
         } catch (error) {
-            console.log('❌ Error al reiniciar vista:', error);
-            // Fallback: recargar el visor
-            console.log('🔄 Recargando visor como fallback');
-            // Recargar con la ubicación actual
+            console.log('Error al reiniciar vista:', error);
             const currentLocation = Object.keys(locations).find(key => 
-                locations[key].image === photoSphereViewer.config.panorama
+                locations[key].image === photoSphereViewer.config.panorama.replace(mapaCumbreData.pluginUrl, '')
             );
             if (currentLocation) {
                 show360(locations[currentLocation].image, currentLocation);
@@ -510,3 +442,27 @@ function resetView() {
         }
     }
 }
+
+// Inicialización principal
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await waitForLibraries();
+        initializeElements();
+        setupControls();
+        showMap();
+        
+        // Reposicionar marcadores cuando cambie el tamaño de la ventana
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (currentMode === 'map') {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(positionMarkers, 50);
+            }
+        });
+        
+        console.log('Mapa Cumbre USAC inicializado correctamente');
+    } catch (error) {
+        console.error('Error inicializando Mapa Cumbre USAC:', error);
+        showError('Error al inicializar el mapa: ' + error.message);
+    }
+});
