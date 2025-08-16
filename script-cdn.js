@@ -131,16 +131,16 @@ function showMap() {
     panorama.innerHTML = `
         <div class="map-container">
             <img src="img/mapa-usac.jpg" alt="Mapa USAC" id="mapImage">
-            <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="77" data-y="18"></div>
+            <div class="map-marker" data-target="iglu" title="Aula Magna Iglú" data-x="77.5" data-y="19"></div>
+            <div class="map-marker" data-target="lobby-biblioteca" title="Lobby Biblioteca Central" data-x="58" data-y="29"></div>
             <div class="map-marker" data-target="biblioteca-central" title="Biblioteca Central" data-x="55" data-y="25"></div>
-            <div class="map-marker" data-target="ciencias-juridicas" title="Facultad de Ciencias Jurídicas" data-x="30" data-y="20"></div>
-            <div class="map-marker" data-target="ciencias-economicas" title="Facultad de Ciencias Económicas" data-x="17" data-y="24"></div>
+            <div class="map-marker" data-target="plaza-mario" title="Plaza Mario López Larrave" data-x="54.5" data-y="40"></div>
+            <div class="map-marker" data-target="ciencias-juridicas" title="Facultad de Ciencias Jurídicas" data-x="30" data-y="22"></div>
+            <div class="map-marker" data-target="ciencias-economicas" title="Facultad de Ciencias Económicas" data-x="16.8" data-y="25.5"></div>
             <div class="map-marker" data-target="humanidades" title="Facultad de Humanidades" data-x="37" data-y="32"></div>
-            <div class="map-marker" data-target="ingenieria" title="Facultad de Ingeniería" data-x="70" data-y="53"></div>
-            <div class="map-marker" data-target="arquitectura" title="Facultad de Arquitectura" data-x="73" data-y="70"></div>
-            <div class="map-marker" data-target="plaza" title="Plaza de los Mártires" data-x="45" data-y="45"></div>
-            <div class="map-marker" data-target="plaza-mario" title="Plaza Mario López Larrave" data-x="50" data-y="35"></div>
-            <div class="map-marker" data-target="lobby-biblioteca" title="Lobby Biblioteca Central" data-x="55" data-y="30"></div>
+            <div class="map-marker" data-target="ingenieria" title="Facultad de Ingeniería" data-x="69.5" data-y="55"></div>
+            <div class="map-marker" data-target="arquitectura" title="Facultad de Arquitectura" data-x="73" data-y="72"></div>
+            <div class="map-marker" data-target="plaza" title="Plaza de los Mártires" data-x="53" data-y="58"></div>
         </div>
     `;
     
@@ -214,6 +214,17 @@ function show360(imageSrc, locationKey) {
     resetBtn.style.display = 'block';
     loading.style.display = 'flex';
     
+    // Mensaje especial para archivos grandes
+    if (locationKey === 'lobby-biblioteca' || locationKey === 'ciencias-juridicas') {
+        loading.innerHTML = `
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h3>🌐 Cargando Vista 360°...</h3>
+                <p>Este archivo es grande (${locationKey === 'lobby-biblioteca' ? '10.7 MB' : '11 MB'}), por favor espera un momento.</p>
+            </div>
+        `;
+    }
+    
     // Limpiar contenedor y crear visor
     panorama.innerHTML = '';
     console.log('🔄 Iniciando Photo Sphere Viewer...');
@@ -232,6 +243,11 @@ function show360(imageSrc, locationKey) {
             mousewheel: true,
             mousemove: true,
             touchmoveTwoFingers: true,
+            loadingImg: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDNDMTEuNzE2IDMgNSAxMC4xNjMgNSAxOS4wODNDNSAyNy4wMDMgMTEuNzE2IDM0LjE2NyAyMCAzNC4xNjdDMjguMjg0IDM0LjE2NyAzNSAyNy4wMDMgMzUgMTkuMDgzQzM1IDEwLjE2MyAyOC4yODQgMyAyMCAzWiIgZmlsbD0iIzAwQTBCOCIvPgo8cGF0aCBkPSJNMjAgMzVDMjguMjg0IDM1IDM1IDI4LjI4NCAzNSAyMEMzNSAxMS43MTYgMjguMjg0IDUgMjAgNUMyMC4wMDEgNSAyMCA1IDIwIDVWMzVDMjAgMzUgMjAgMzUgMjAgMzVaIiBmaWxsPSIjMDBBMEI4Ii8+Cjwvc3ZnPgo=',
+            moveSpeed: 1.5,
+            zoomSpeed: 1,
+            maxZoom: 2,
+            minZoom: 0.5,
             lang: {
                 zoom: 'Zoom',
                 zoomOut: 'Alejar',
@@ -260,7 +276,7 @@ function show360(imageSrc, locationKey) {
                                 yaw: (() => {
                                     if (locationKey === 'arquitectura' || locationKey === 'iglu' || locationKey === 'lobby-biblioteca') {
                                         return Math.PI; // 180 grados (lado opuesto)
-                                    } else if (locationKey === 'ciencias-juridicas') {
+                                    } else if (locationKey === 'ciencias-juridicas' || locationKey === 'plaza' || locationKey === 'plaza-mario') {
                                         return Math.PI / 2; // 90 grados (lado derecho)
                                     } else {
                                         return 0; // 0 grados (frente)
@@ -282,6 +298,7 @@ function show360(imageSrc, locationKey) {
             console.log('✅ Photo Sphere Viewer cargado correctamente');
             setupMarkerEvents();
             loading.style.display = 'none';
+            clearTimeout(loadTimeout); // Limpiar timeout cuando carga exitosamente
             
             // Establecer vista inicial para ingeniería
             if (locationKey === 'ingenieria') {
@@ -303,6 +320,14 @@ function show360(imageSrc, locationKey) {
             console.error('❌ Error en Photo Sphere Viewer:', error);
             showError('Error al cargar la imagen 360°: ' + error);
         });
+        
+        // Timeout para archivos grandes
+        const loadTimeout = setTimeout(() => {
+            if (loading.style.display !== 'none') {
+                console.log('⏰ Timeout de carga para archivo grande');
+                showError('El archivo es muy grande y está tardando en cargar. Por favor, espera un momento más o intenta nuevamente.');
+            }
+        }, 30000); // 30 segundos de timeout
         
         // Obtener referencia al plugin de markers
         markersPlugin = photoSphereViewer.getPlugin(MarkersPlugin);
