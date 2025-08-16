@@ -257,7 +257,15 @@ function show360(imageSrc, locationKey) {
                         {
                             id: 'conference-image',
                             position: { 
-                                yaw: (locationKey === 'arquitectura' || locationKey === 'iglu') ? Math.PI : 0, 
+                                yaw: (() => {
+                                    if (locationKey === 'arquitectura' || locationKey === 'iglu' || locationKey === 'lobby-biblioteca') {
+                                        return Math.PI; // 180 grados (lado opuesto)
+                                    } else if (locationKey === 'ciencias-juridicas') {
+                                        return Math.PI / 2; // 90 grados (lado derecho)
+                                    } else {
+                                        return 0; // 0 grados (frente)
+                                    }
+                                })(), 
                                 pitch: -0.2 
                             },
                             imageLayer: 'conferencias/conferencias.jpeg',
